@@ -11,5 +11,11 @@
 
     <artifactId>common-dao</artifactId>
 
-
+<dependencies>
+    <dependency>
+        <groupId>com.simple4code.simple4j.multiModule</groupId>
+        <artifactId>common-domain</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+</dependencies>
 </project>

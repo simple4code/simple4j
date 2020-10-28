@@ -11,5 +11,25 @@
 
     <artifactId>common-service</artifactId>
 
-
+<dependencies>
+    <dependency>
+        <groupId>com.simple4code.simple4j.multiModule</groupId>
+        <artifactId>common-dao</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+        <groupId>com.simple4code.simple4j.multiModule</groupId>
+        <artifactId>common-core</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+        <groupId>com.simple4code.simple4j.multiModule</groupId>
+        <artifactId>common-domain</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+</dependencies>
 </project>

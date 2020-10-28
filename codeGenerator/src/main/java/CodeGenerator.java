@@ -9,7 +9,9 @@ import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Chen
@@ -30,9 +32,13 @@ public class CodeGenerator {
      */
     private static final String AUTHOR = "simple4j";
     /**
-     * 单体项目工程包名
+     * 项目工程包名
      */
-    private static final String MODULE = "simple4Single";
+    private static final String MODULE = "simple4MultiModule_manage";
+    private static final String COMMON_MODULE = "simple4MultiModule_commons";
+    private static final String DAO_MODULE = COMMON_MODULE + File.separator + "common-dao";
+    private static final String SERVICE_MODULE = COMMON_MODULE + File.separator + "common-service";
+    private static final String DOMAIN_MODULE = COMMON_MODULE + File.separator + "common-domain";
     /**
      * 模块包名
      */
@@ -40,7 +46,7 @@ public class CodeGenerator {
     /**
      * 包路径
      */
-    private static final String PACKAGE_PARENT = "com.simple4code.simple4j.demo." + PACKAGE_MODULE;
+    private static final String PACKAGE_PARENT = "com.simple4code.simple4j.demo" ;
     /**
      * 表的前缀
      */
@@ -54,7 +60,7 @@ public class CodeGenerator {
      */
     public static void main(String[] args) {
         // 执行
-        getAutoGenerator("t_sys_user","t_sys_role").execute();
+        getAutoGenerator("t_sys_user", "t_sys_role").execute();
     }
 
     /**
@@ -96,8 +102,37 @@ public class CodeGenerator {
      * @return 返回 PackageConfig
      */
     private static PackageConfig getPackageConfig() {
+        String projectPath = System.getProperty("user.dir");
+        String mavenPath = "\\src\\main\\java\\";
         PackageConfig pc = new PackageConfig();
         pc.setParent(PACKAGE_PARENT);
+        //设置文件的包名
+        pc.setModuleName(PACKAGE_MODULE);
+        //pc.setEntity(PACKAGE_PARENT );
+        //pc.setMapper(PACKAGE_PARENT );
+        //设置不同类文件生成的路径
+        String moduleName = pc.getModuleName();
+
+        /**
+         * packageInfo配置controller、service、serviceImpl、entity、mapper等文件的包路径
+         * 这里包路径可以根据实际情况灵活配置
+         */
+        Map<String, String> packageInfo = new HashMap<>();
+
+        packageInfo.put(ConstVal.CONTROLLER, PACKAGE_PARENT + File.separator + moduleName + ".controller");
+        packageInfo.put(ConstVal.SERVICE, PACKAGE_PARENT + File.separator + moduleName + ".service");
+        packageInfo.put(ConstVal.SERVICE_IMPL, PACKAGE_PARENT + File.separator + moduleName + ".service.impl");
+        packageInfo.put(ConstVal.ENTITY, PACKAGE_PARENT + File.separator + moduleName + ".entity");
+        packageInfo.put(ConstVal.MAPPER, PACKAGE_PARENT + File.separator + moduleName + ".mapper");
+
+        Map pathInfo = new HashMap<>();
+        pathInfo.put(ConstVal.CONTROLLER_PATH, projectPath + File.separator + MODULE + mavenPath + packageInfo.get(ConstVal.CONTROLLER).replaceAll("\\.", StringPool.BACK_SLASH + File.separator));
+        pathInfo.put(ConstVal.SERVICE_PATH, projectPath + File.separator + SERVICE_MODULE + mavenPath + packageInfo.get(ConstVal.SERVICE).replaceAll("\\.", StringPool.BACK_SLASH + File.separator));
+        pathInfo.put(ConstVal.SERVICE_IMPL_PATH, projectPath + File.separator + SERVICE_MODULE + mavenPath + packageInfo.get(ConstVal.SERVICE_IMPL).replaceAll("\\.", StringPool.BACK_SLASH + File.separator));
+        pathInfo.put(ConstVal.ENTITY_PATH, projectPath + File.separator + DOMAIN_MODULE + mavenPath + packageInfo.get(ConstVal.ENTITY).replaceAll("\\.", StringPool.BACK_SLASH + File.separator));
+        pathInfo.put(ConstVal.MAPPER_PATH, projectPath + File.separator + DAO_MODULE + mavenPath + packageInfo.get(ConstVal.MAPPER).replaceAll("\\.", StringPool.BACK_SLASH + File.separator));
+        //pathInfo.put(ConstVal.XML_PATH, projectPath + "\\src\\main\\resources\\mapper\\" + moduleName);
+        pc.setPathInfo(pathInfo);
         return pc;
     }
 
@@ -160,7 +195,7 @@ public class CodeGenerator {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
-                return System.getProperty("user.dir") + File.separator + MODULE + "/src/main/resources/mapping/" + PACKAGE_MODULE + "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
+                return System.getProperty("user.dir") + File.separator + DAO_MODULE + "/src/main/resources/mapping/" + PACKAGE_MODULE + "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
             }
         });
 
