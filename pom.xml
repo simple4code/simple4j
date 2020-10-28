@@ -5,9 +5,9 @@
     <packaging>pom</packaging>
     <modules>
         <module>codeGenerator</module>
-        <module>simple4Single</module>
-        <module>simple4j_manage</module>
-        <module>simple4j_common</module>
+        <module>simple4MultiModule_manage</module>
+        <module>simple4MultiModule_commons</module>
+        <module>simple4MultiModule_app</module>
     </modules>
 
     <groupId>com.simple4code.simple4j</groupId>
