@@ -6,9 +6,11 @@
     <modules>
         <module>codeGenerator</module>
         <module>simple4Single</module>
+        <module>simple4j_manage</module>
+        <module>simple4j_common</module>
     </modules>
 
-    <groupId>com.simple4j</groupId>
+    <groupId>com.simple4code.simple4j</groupId>
     <artifactId>simple4j_parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>simple4j_parent</name>
