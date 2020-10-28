@@ -8,7 +8,7 @@
         <module>simple4Single</module>
     </modules>
 
-    <groupId>com.simple4j</groupId>
+    <groupId>com.simple4code.simple4j</groupId>
     <artifactId>simple4j_parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>simple4j_parent</name>

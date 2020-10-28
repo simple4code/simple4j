@@ -40,7 +40,7 @@ public class CodeGenerator {
     /**
      * 包路径
      */
-    private static final String PACKAGE_PARENT = "com.simple4j.demo." + PACKAGE_MODULE;
+    private static final String PACKAGE_PARENT = "com.simple4code.simple4j.demo." + PACKAGE_MODULE;
     /**
      * 表的前缀
      */
