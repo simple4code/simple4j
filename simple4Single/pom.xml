@@ -4,11 +4,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>simple4j_parent</artifactId>
-        <groupId>com.simple4j</groupId>
+        <groupId>com.simple4code.simple4j</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.simple4j.singleModule</groupId>
+    <groupId>com.simple4code.simple4j.singleModule</groupId>
     <artifactId>simple4Single</artifactId>
 
     <dependencies>
@@ -90,7 +90,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
                 <configuration>
-                    <mainClass>com.simple4j.Simple4jSingleApplication</mainClass>
+                    <mainClass>com.simple4code.simple4j.Simple4jSingleApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>
