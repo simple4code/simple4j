@@ -20,10 +20,10 @@ public class CodeGenerator {
     /**
      * 数据库链接配置
      */
-    private static final String MYSQL_URL = "jdbc:mysql://127.0.0.1:3306/jfinal?useUnicode=true&useSSL=false&characterEncoding=utf8";
+    private static final String MYSQL_URL = "jdbc:mysql://127.0.0.1:3306/simple4j?useUnicode=true&useSSL=false&characterEncoding=utf8";
     private static final String MYSQL_DRIVER_NAME = "com.mysql.jdbc.Driver";
-    private static final String MYSQL_USERNAME = "jfinal";
-    private static final String MYSQL_PASSWORD = "jfinal";
+    private static final String MYSQL_USERNAME = "simple4j";
+    private static final String MYSQL_PASSWORD = "simple4j";
 
     /**
      * 作者
