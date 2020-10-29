@@ -34,8 +34,8 @@ public class CodeGenerator {
     /**
      * 项目工程包名
      */
-    private static final String MODULE = "simple4MultiModule_manage";
-    private static final String COMMON_MODULE = "simple4MultiModule_commons";
+    private static final String MODULE = "multiModule_manage";
+    private static final String COMMON_MODULE = "multiModule_commons";
     private static final String DAO_MODULE = COMMON_MODULE + File.separator + "common-dao";
     private static final String SERVICE_MODULE = COMMON_MODULE + File.separator + "common-service";
     private static final String DOMAIN_MODULE = COMMON_MODULE + File.separator + "common-domain";
