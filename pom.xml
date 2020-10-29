@@ -79,9 +79,50 @@
                 <artifactId>freemarker</artifactId>
                 <version>2.3.30</version>
             </dependency>
+            <dependency>
+                <groupId>com.simple4code.simple4j.multiModule</groupId>
+                <artifactId>common-domain</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.simple4code.simple4j.multiModule</groupId>
+                <artifactId>common-dao</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.simple4code.simple4j.multiModule</groupId>
+                <artifactId>common-core</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.simple4code.simple4j.multiModule</groupId>
+                <artifactId>common-service</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.simple4code.simple4j.multiModule</groupId>
+                <artifactId>multiModule_commons</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.simple4code.simple4j.multiModule</groupId>
+                <artifactId>manage_service_impl</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.simple4code.simple4j.multiModule</groupId>
+                <artifactId>app_service_impl</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+    </dependencies>
     <!-- 远程仓库配置 -->
     <repositories>
         <!--阿里云仓库-->

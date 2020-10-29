@@ -34,10 +34,13 @@ public class CodeGenerator {
     /**
      * 项目工程包名
      */
-    private static final String MODULE = "multiModule_manage";
+    private static final String MODULE_PARENT = "multiModule_";
+    private static final String MODULE = "manage";
+    private static final String CONTROLLER_MODULE = MODULE_PARENT + MODULE + File.separator + MODULE + "_web";
     private static final String COMMON_MODULE = "multiModule_commons";
     private static final String DAO_MODULE = COMMON_MODULE + File.separator + "common-dao";
     private static final String SERVICE_MODULE = COMMON_MODULE + File.separator + "common-service";
+    private static final String SERVICE_IMPL_MODULE = MODULE_PARENT + MODULE + File.separator + MODULE + "_service_impl";
     private static final String DOMAIN_MODULE = COMMON_MODULE + File.separator + "common-domain";
     /**
      * 模块包名
@@ -60,7 +63,7 @@ public class CodeGenerator {
      */
     public static void main(String[] args) {
         // 执行
-        getAutoGenerator("t_sys_user", "t_sys_role").execute();
+        getAutoGenerator("t_sys_user_role").execute();
     }
 
     /**
@@ -126,9 +129,9 @@ public class CodeGenerator {
         packageInfo.put(ConstVal.MAPPER, PACKAGE_PARENT + File.separator + moduleName + ".mapper");
 
         Map pathInfo = new HashMap<>();
-        pathInfo.put(ConstVal.CONTROLLER_PATH, projectPath + File.separator + MODULE + mavenPath + packageInfo.get(ConstVal.CONTROLLER).replaceAll("\\.", StringPool.BACK_SLASH + File.separator));
+        pathInfo.put(ConstVal.CONTROLLER_PATH, projectPath + File.separator + CONTROLLER_MODULE + mavenPath + packageInfo.get(ConstVal.CONTROLLER).replaceAll("\\.", StringPool.BACK_SLASH + File.separator));
         pathInfo.put(ConstVal.SERVICE_PATH, projectPath + File.separator + SERVICE_MODULE + mavenPath + packageInfo.get(ConstVal.SERVICE).replaceAll("\\.", StringPool.BACK_SLASH + File.separator));
-        pathInfo.put(ConstVal.SERVICE_IMPL_PATH, projectPath + File.separator + SERVICE_MODULE + mavenPath + packageInfo.get(ConstVal.SERVICE_IMPL).replaceAll("\\.", StringPool.BACK_SLASH + File.separator));
+        pathInfo.put(ConstVal.SERVICE_IMPL_PATH, projectPath + File.separator + SERVICE_IMPL_MODULE + mavenPath + packageInfo.get(ConstVal.SERVICE_IMPL).replaceAll("\\.", StringPool.BACK_SLASH + File.separator));
         pathInfo.put(ConstVal.ENTITY_PATH, projectPath + File.separator + DOMAIN_MODULE + mavenPath + packageInfo.get(ConstVal.ENTITY).replaceAll("\\.", StringPool.BACK_SLASH + File.separator));
         pathInfo.put(ConstVal.MAPPER_PATH, projectPath + File.separator + DAO_MODULE + mavenPath + packageInfo.get(ConstVal.MAPPER).replaceAll("\\.", StringPool.BACK_SLASH + File.separator));
         //pathInfo.put(ConstVal.XML_PATH, projectPath + "\\src\\main\\resources\\mapper\\" + moduleName);
