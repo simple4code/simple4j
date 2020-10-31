@@ -34,9 +34,9 @@ public class CodeGenerator {
     /**
      * 项目工程包名
      */
-    private static final String MODULE_PARENT = "multiModule_";
-    private static final String MODULE = "manage";
-    private static final String CONTROLLER_MODULE = MODULE_PARENT + MODULE + File.separator + MODULE + "_web";
+    private static final String MODULE_PARENT = "ihrm_";
+    private static final String MODULE = "company";
+    private static final String CONTROLLER_MODULE = MODULE_PARENT + MODULE + File.separator ;
     private static final String COMMON_MODULE = "multiModule_commons";
     private static final String DAO_MODULE = COMMON_MODULE + File.separator + "common-dao";
     private static final String SERVICE_MODULE = COMMON_MODULE + File.separator + "common-service";
@@ -45,7 +45,7 @@ public class CodeGenerator {
     /**
      * 模块包名
      */
-    private static final String PACKAGE_MODULE = "sys";
+    private static final String PACKAGE_MODULE = "company";
     /**
      * 包路径
      */
@@ -53,7 +53,7 @@ public class CodeGenerator {
     /**
      * 表的前缀
      */
-    private static final String TABLE_PREFIX = "t_";
+    private static final String TABLE_PREFIX = "co_";
 
 
     /**
@@ -63,7 +63,7 @@ public class CodeGenerator {
      */
     public static void main(String[] args) {
         // 执行
-        getAutoGenerator("t_sys_user_role").execute();
+        getAutoGenerator("co_department","co_company").execute();
     }
 
     /**
@@ -73,7 +73,7 @@ public class CodeGenerator {
      */
     private static GlobalConfig getGlobalConfig() {
         GlobalConfig gc = new GlobalConfig();
-        gc.setOutputDir(System.getProperty("user.dir") + File.separator + MODULE + "/src/main/java");
+        gc.setOutputDir(System.getProperty("user.dir") + File.separator + MODULE_PARENT+MODULE + "/src/main/java");
         gc.setAuthor(AUTHOR);
         gc.setOpen(false);
         //去除接口前面的I
@@ -122,18 +122,19 @@ public class CodeGenerator {
          */
         Map<String, String> packageInfo = new HashMap<>();
 
-        packageInfo.put(ConstVal.CONTROLLER, PACKAGE_PARENT + File.separator + moduleName + ".controller");
-        packageInfo.put(ConstVal.SERVICE, PACKAGE_PARENT + File.separator + moduleName + ".service");
-        packageInfo.put(ConstVal.SERVICE_IMPL, PACKAGE_PARENT + File.separator + moduleName + ".service.impl");
-        packageInfo.put(ConstVal.ENTITY, PACKAGE_PARENT + File.separator + moduleName + ".entity");
-        packageInfo.put(ConstVal.MAPPER, PACKAGE_PARENT + File.separator + moduleName + ".mapper");
+        String modulePathName = PACKAGE_PARENT + File.separator + moduleName;
+        packageInfo.put(ConstVal.CONTROLLER, modulePathName + ".controller");
+        packageInfo.put(ConstVal.SERVICE, modulePathName + ".service");
+        packageInfo.put(ConstVal.SERVICE_IMPL, modulePathName + ".service.impl");
+        packageInfo.put(ConstVal.ENTITY, modulePathName + ".entity");
+        packageInfo.put(ConstVal.MAPPER, modulePathName + ".mapper");
 
         Map pathInfo = new HashMap<>();
         pathInfo.put(ConstVal.CONTROLLER_PATH, projectPath + File.separator + CONTROLLER_MODULE + mavenPath + packageInfo.get(ConstVal.CONTROLLER).replaceAll("\\.", StringPool.BACK_SLASH + File.separator));
-        pathInfo.put(ConstVal.SERVICE_PATH, projectPath + File.separator + SERVICE_MODULE + mavenPath + packageInfo.get(ConstVal.SERVICE).replaceAll("\\.", StringPool.BACK_SLASH + File.separator));
-        pathInfo.put(ConstVal.SERVICE_IMPL_PATH, projectPath + File.separator + SERVICE_IMPL_MODULE + mavenPath + packageInfo.get(ConstVal.SERVICE_IMPL).replaceAll("\\.", StringPool.BACK_SLASH + File.separator));
+        pathInfo.put(ConstVal.SERVICE_PATH, projectPath + File.separator + CONTROLLER_MODULE + mavenPath + packageInfo.get(ConstVal.SERVICE).replaceAll("\\.", StringPool.BACK_SLASH + File.separator));
+        pathInfo.put(ConstVal.SERVICE_IMPL_PATH, projectPath + File.separator + CONTROLLER_MODULE + mavenPath + packageInfo.get(ConstVal.SERVICE_IMPL).replaceAll("\\.", StringPool.BACK_SLASH + File.separator));
         pathInfo.put(ConstVal.ENTITY_PATH, projectPath + File.separator + DOMAIN_MODULE + mavenPath + packageInfo.get(ConstVal.ENTITY).replaceAll("\\.", StringPool.BACK_SLASH + File.separator));
-        pathInfo.put(ConstVal.MAPPER_PATH, projectPath + File.separator + DAO_MODULE + mavenPath + packageInfo.get(ConstVal.MAPPER).replaceAll("\\.", StringPool.BACK_SLASH + File.separator));
+        pathInfo.put(ConstVal.MAPPER_PATH, projectPath + File.separator + CONTROLLER_MODULE + mavenPath + packageInfo.get(ConstVal.MAPPER).replaceAll("\\.", StringPool.BACK_SLASH + File.separator));
         //pathInfo.put(ConstVal.XML_PATH, projectPath + "\\src\\main\\resources\\mapper\\" + moduleName);
         pc.setPathInfo(pathInfo);
         return pc;
@@ -198,7 +199,7 @@ public class CodeGenerator {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
-                return System.getProperty("user.dir") + File.separator + DAO_MODULE + "/src/main/resources/mapping/" + PACKAGE_MODULE + "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
+                return System.getProperty("user.dir") + File.separator + CONTROLLER_MODULE + "/src/main/resources/mapping/" + PACKAGE_MODULE + "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
             }
         });
 

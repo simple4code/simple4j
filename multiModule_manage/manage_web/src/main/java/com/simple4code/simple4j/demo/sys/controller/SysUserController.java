@@ -1,7 +1,7 @@
 package com.simple4code.simple4j.demo.sys.controller;
 
 
-import com.simple4code.simple4j.core.common.entity.RestResult;
+import com.simple4code.simple4j.core.entity.RestResult;
 import com.simple4code.simple4j.demo.sys.service.SysUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
