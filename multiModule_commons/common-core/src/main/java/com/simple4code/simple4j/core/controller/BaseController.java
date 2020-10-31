@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
  * 获取request，response
  * 获取企业id，获取企业名称
  */
-public class BaseController  extends ApiController {
+public class BaseController extends ApiController {
 
     protected HttpServletRequest request;
     protected HttpServletResponse response;
@@ -21,6 +21,12 @@ public class BaseController  extends ApiController {
     protected String companyName = "江苏传智播客教育股份有限公司";
 
     protected Claims claims;
+
+    /**
+     *  ModelAttribute 进子类控制器的方法之前，都先运行的方法。
+     * @param request
+     * @param response
+     */
     @ModelAttribute
     public void setReqAndResp(HttpServletRequest request, HttpServletResponse response) {
         this.request = request;
