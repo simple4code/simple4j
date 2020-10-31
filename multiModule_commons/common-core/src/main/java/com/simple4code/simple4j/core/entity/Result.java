@@ -1,5 +1,7 @@
 package com.simple4code.simple4j.core.entity;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,12 +19,16 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
+@ApiModel("api通用返回数据")
 public class Result {
-
-    private boolean success;//是否成功
-    private Integer code;// 返回码
-    private String message;//返回信息
-    private Object data;// 返回数据
+    @ApiModelProperty("是否成功")
+    private boolean success;
+    @ApiModelProperty("返回码")
+    private Integer code;
+    @ApiModelProperty("提示信息,供报错时使用")
+    private String message;
+    @ApiModelProperty("返回的数据")
+    private Object data;
 
     public Result(ResultCode code) {
         this.success = code.success;

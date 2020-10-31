@@ -3,6 +3,9 @@ package com.simple4code.simple4j.demo.company.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -17,6 +20,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("co_company")
+@ApiModel("企业实体类")
 public class Company implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -26,19 +30,15 @@ public class Company implements Serializable {
      */
     private String id;
 
-    /**
-     * 公司名称
-     */
+
+    @ApiModelProperty("公司名称")
     private String name;
 
-    /**
-     * 企业登录账号ID
-     */
+
+    @ApiModelProperty("企业登录账号ID")
     private String managerId;
 
-    /**
-     * 当前版本
-     */
+    @ApiModelProperty("当前版本")
     private String version;
 
     /**
@@ -46,24 +46,16 @@ public class Company implements Serializable {
      */
     private LocalDateTime renewalDate;
 
-    /**
-     * 到期时间
-     */
+    @ApiModelProperty("到期时间")
     private LocalDateTime expirationDate;
 
-    /**
-     * 公司地区
-     */
+    @ApiModelProperty("公司地区")
     private String companyArea;
 
-    /**
-     * 公司地址
-     */
+    @ApiModelProperty("公司地址")
     private String companyAddress;
 
-    /**
-     * 营业执照-图片ID
-     */
+    @ApiModelProperty("营业执照-图片ID")
     private String businessLicenseId;
 
     /**

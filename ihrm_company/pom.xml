@@ -14,6 +14,13 @@
     <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-test</artifactId>
+        <scope>test</scope>
+        <exclusions>
+            <exclusion>
+                <groupId>org.junit.vintage</groupId>
+                <artifactId>junit-vintage-engine</artifactId>
+            </exclusion>
+        </exclusions>
     </dependency>
     <dependency>
         <groupId>com.simple4code.simple4j.multiModule</groupId>
@@ -27,6 +34,35 @@
         <groupId>mysql</groupId>
         <artifactId>mysql-connector-java</artifactId>
     </dependency>
+    <dependency>
+        <!-- Automatically restart whenever files on the classpath change -->
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-devtools</artifactId>
+        <scope>runtime</scope>
+        <optional>true</optional>
+    </dependency>
 </dependencies>
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
+                <configuration>
+                    <mainClass>com.simple4code.simple4j.CompanyApplication</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+            </plugin>
+
+        </plugins>
+    </build>
 
 </project>
