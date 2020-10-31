@@ -1,11 +1,11 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : jfinal
+ Source Server         : simple4j
  Source Server Type    : MySQL
  Source Server Version : 50721
  Source Host           : localhost:3306
- Source Schema         : heima_ihrm
+ Source Schema         : simple4j
 
  Target Server Type    : MySQL
  Target Server Version : 50721
