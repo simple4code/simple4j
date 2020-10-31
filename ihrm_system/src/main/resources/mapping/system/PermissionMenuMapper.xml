@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simple4code.simple4j.demo.system.mapper.PermissionMenuMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.simple4code.simple4j.demo.system.entity.PermissionMenu">
+        <id column="id" property="id" />
+        <result column="menu_icon" property="menuIcon" />
+        <result column="menu_order" property="menuOrder" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, menu_icon, menu_order
+    </sql>
+
+</mapper>

@@ -54,7 +54,8 @@ public class JwtInterceptor extends HandlerInterceptorAdapter {
             Claims claims = jwtUtils.parseJwt(token);
             if (claims != null) {
                 //通过claims获取到当前用户的可访问API权限字符串
-                String apis = (String) claims.get("apis");  //api-user-delete,api-user-update
+                //api-user-delete,api-user-update
+                String apis = (String) claims.get("apis");
                 //通过handler
                 HandlerMethod h = (HandlerMethod) handler;
                 //获取接口上的reqeustmapping注解

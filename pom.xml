@@ -9,6 +9,7 @@
         <module>multiModule_commons</module>
         <module>multiModule_app</module>
         <module>ihrm_company</module>
+        <module>ihrm_system</module>
     </modules>
 
     <groupId>com.simple4code.simple4j</groupId>
