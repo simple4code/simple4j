@@ -1,0 +1,1 @@
+java -jar xxl-job-admin-2.2.1-SNAPSHOT.jar
