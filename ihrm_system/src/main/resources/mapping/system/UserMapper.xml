@@ -4,25 +4,25 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.simple4code.simple4j.demo.system.entity.User">
-        <id column="id" property="id" />
-        <result column="mobile" property="mobile" />
-        <result column="username" property="username" />
-        <result column="password" property="password" />
-        <result column="role" property="role" />
-        <result column="enable_state" property="enableState" />
-        <result column="create_time" property="createTime" />
-        <result column="department_id" property="departmentId" />
-        <result column="time_of_entry" property="timeOfEntry" />
-        <result column="form_of_employment" property="formOfEmployment" />
-        <result column="work_number" property="workNumber" />
-        <result column="form_of_management" property="formOfManagement" />
-        <result column="working_city" property="workingCity" />
-        <result column="correction_time" property="correctionTime" />
-        <result column="in_service_status" property="inServiceStatus" />
-        <result column="company_id" property="companyId" />
-        <result column="company_name" property="companyName" />
-        <result column="department_name" property="departmentName" />
-        <result column="role_ids" property="roleIds" />
+        <id column="id" property="id"/>
+        <result column="mobile" property="mobile"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="role" property="role"/>
+        <result column="enable_state" property="enableState"/>
+        <result column="create_time" property="createTime"/>
+        <result column="department_id" property="departmentId"/>
+        <result column="time_of_entry" property="timeOfEntry"/>
+        <result column="form_of_employment" property="formOfEmployment"/>
+        <result column="work_number" property="workNumber"/>
+        <result column="form_of_management" property="formOfManagement"/>
+        <result column="working_city" property="workingCity"/>
+        <result column="correction_time" property="correctionTime"/>
+        <result column="in_service_status" property="inServiceStatus"/>
+        <result column="company_id" property="companyId"/>
+        <result column="company_name" property="companyName"/>
+        <result column="department_name" property="departmentName"/>
+        <result column="role_ids" property="roleIds"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->

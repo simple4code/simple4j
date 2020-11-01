@@ -35,7 +35,7 @@ public class CodeGenerator {
      * 项目工程包名
      */
     private static final String MODULE_PARENT = "ihrm_";
-    private static final String MODULE = "company";
+    private static final String MODULE = "system";
     private static final String CONTROLLER_MODULE = MODULE_PARENT + MODULE + File.separator ;
     private static final String COMMON_MODULE = "multiModule_commons";
     private static final String DAO_MODULE = COMMON_MODULE + File.separator + "common-dao";
@@ -45,7 +45,7 @@ public class CodeGenerator {
     /**
      * 模块包名
      */
-    private static final String PACKAGE_MODULE = "company";
+    //private static final String PACKAGE_MODULE = MODULE;
     /**
      * 包路径
      */
@@ -53,7 +53,7 @@ public class CodeGenerator {
     /**
      * 表的前缀
      */
-    private static final String TABLE_PREFIX = "co_";
+    private static final String TABLE_PREFIX = "pe_";
 
 
     /**
@@ -63,7 +63,7 @@ public class CodeGenerator {
      */
     public static void main(String[] args) {
         // 执行
-        getAutoGenerator("co_department","co_company").execute();
+        getAutoGenerator("pe_permission","pe_permission_api","pe_permission_menu","pe_permission_point","pe_role","pe_user").execute();
     }
 
     /**
@@ -110,7 +110,7 @@ public class CodeGenerator {
         PackageConfig pc = new PackageConfig();
         pc.setParent(PACKAGE_PARENT);
         //设置文件的包名
-        pc.setModuleName(PACKAGE_MODULE);
+        pc.setModuleName(MODULE);
         //pc.setEntity(PACKAGE_PARENT );
         //pc.setMapper(PACKAGE_PARENT );
         //设置不同类文件生成的路径
@@ -199,7 +199,7 @@ public class CodeGenerator {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
-                return System.getProperty("user.dir") + File.separator + CONTROLLER_MODULE + "/src/main/resources/mapping/" + PACKAGE_MODULE + "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
+                return System.getProperty("user.dir") + File.separator + CONTROLLER_MODULE + "/src/main/resources/mapping/" + MODULE + "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
             }
         });
 

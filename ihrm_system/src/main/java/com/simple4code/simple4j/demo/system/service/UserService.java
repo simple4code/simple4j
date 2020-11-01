@@ -2,6 +2,7 @@ package com.simple4code.simple4j.demo.system.service;
 
 import com.simple4code.simple4j.demo.system.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.simple4code.simple4j.demo.system.entity.vo.UserVO;
 
 /**
  * <p>
@@ -13,4 +14,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface UserService extends IService<User> {
 
+    UserVO findById(String userid);
+
+    UserVO findByMobile(String mobile);
 }
