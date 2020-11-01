@@ -9,6 +9,8 @@ import com.simple4code.simple4j.demo.system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+
 /**
  * <p>
  * 服务实现类
@@ -35,5 +37,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         QueryWrapper<User> wrapper = new QueryWrapper<User>();
         wrapper.lambda().eq(User::getMobile, mobile);
         return userMapper.getList(wrapper);
+    }
+
+    @Override
+    public Integer testBatch(Collection<User> testList) {
+        return baseMapper.insertBatchSomeColumn(testList);
     }
 }

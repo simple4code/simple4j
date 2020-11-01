@@ -32,5 +32,8 @@ public class MybatisPlusConfig {
         return configuration -> configuration.setUseDeprecatedExecutor(false);
     }
 
-
+    @Bean
+    public CustomSqlInjector customSqlInjector() {
+        return new CustomSqlInjector();
+    }
 }

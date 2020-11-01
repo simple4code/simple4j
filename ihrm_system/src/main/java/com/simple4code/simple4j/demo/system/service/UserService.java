@@ -4,6 +4,8 @@ import com.simple4code.simple4j.demo.system.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.simple4code.simple4j.demo.system.entity.vo.UserVO;
 
+import java.util.Collection;
+
 /**
  * <p>
  *  服务类
@@ -17,4 +19,6 @@ public interface UserService extends IService<User> {
     UserVO findById(String userid);
 
     UserVO findByMobile(String mobile);
+
+    Integer testBatch(Collection<User> testList);
 }
