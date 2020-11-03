@@ -6,7 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Date;
 import java.util.Map;
@@ -14,12 +14,14 @@ import java.util.Map;
 @Getter
 @Setter
 //@ConfigurationProperties("jwt.config")
-@Configuration(value = "jwt.config")
+//@Configuration(value = "jwt.config")
 public class JwtUtils {
     //签名私钥
+    @Value("${jwt.config.key}")
     private String key;
     //签名的失效时间
-    private Long ttl;
+    @Value("${jwt.config.ttl}")
+    private long ttl;
 
     /**
      * 设置认证token
@@ -27,8 +29,8 @@ public class JwtUtils {
      * subject：登录用户名
      */
     public String createJwt(String id, String name, Map<String, Object> map) {
-        //1.设置失效时间
-        long now = System.currentTimeMillis();//当前毫秒
+        //1.设置失效时间,当前毫秒
+        long now = System.currentTimeMillis();
         long exp = now + ttl;
         //2.创建jwtBuilder
         JwtBuilder jwtBuilder = Jwts.builder().setId(id).setSubject(name)

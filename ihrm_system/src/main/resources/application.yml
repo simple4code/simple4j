@@ -23,5 +23,5 @@ mybatis-plus:
 
 jwt:
   config:
-    key: saas-ihrm
+    key: simple4j
     ttl: 3600000

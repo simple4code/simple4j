@@ -1,6 +1,7 @@
 package com.simple4code.simple4j.core.config.swagger;
 
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -21,14 +22,15 @@ import java.util.List;
 @EnableSwagger2
 @EnableKnife4j
 public class SwaggerConfig {
-
+    @Value("${spring.application.name}")
+    private String applicationName;
 
     @Bean(value = "defaultApi2")
     public Docket defaultApi2() {
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 //分组名称
-                .groupName("2.X版本")
+                .groupName(applicationName)
                 .select()
                 //这里指定Controller扫描包路径
                 .apis(RequestHandlerSelectors.basePackage("com.simple4code.simple4j.demo"))
@@ -43,7 +45,7 @@ public class SwaggerConfig {
     //生成接口信息，包括标题、联系人等
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Swagger接口文档")
+                .title(applicationName+"-Swagger接口文档")
                 .description("simple4j")
                 .contact(new Contact("simple4j", "http://simple4j.simple4code.com/", "simple4j@qq.com"))
                 .version("1.0")

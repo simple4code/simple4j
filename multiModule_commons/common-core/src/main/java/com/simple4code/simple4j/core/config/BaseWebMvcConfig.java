@@ -78,7 +78,8 @@ public class BaseWebMvcConfig implements WebMvcConfigurer {
         //1.添加自定义拦截器
         //2.指定拦截器的url地址
         //3.指定不拦截的url地址
-        registry.addInterceptor(jwtInterceptor).addPathPatterns("/**")
+        registry.addInterceptor(jwtInterceptor)
+                .addPathPatterns("/**")
                 .excludePathPatterns("/system/user/login", "/frame/register/**", "/v2/api-docs",
                         "/api-docs",
                         "/api-docs-ext",
