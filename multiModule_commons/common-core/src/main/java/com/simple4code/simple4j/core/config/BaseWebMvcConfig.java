@@ -11,13 +11,10 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.simple4code.simple4j.core.interceptor.JwtInterceptor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.IOException;
@@ -35,8 +32,8 @@ public class BaseWebMvcConfig implements WebMvcConfigurer {
     @Value("${spring.profiles.active}")
     private String env;
 
-    @Autowired
-    private JwtInterceptor jwtInterceptor;
+    //@Autowired
+    //private JwtInterceptor jwtInterceptor;
 
     @Bean
     @Primary
@@ -73,22 +70,22 @@ public class BaseWebMvcConfig implements WebMvcConfigurer {
         return jsonMapper;
     }
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        //1.添加自定义拦截器
-        //2.指定拦截器的url地址
-        //3.指定不拦截的url地址
-        registry.addInterceptor(jwtInterceptor)
-                .addPathPatterns("/**")
-                .excludePathPatterns("/system/user/login", "/frame/register/**", "/v2/api-docs",
-                        "/api-docs",
-                        "/api-docs-ext",
-                        "/swagger-resources/**",
-                        "/swagger-ui.html",
-                        "/configuration/**",
-                        "/webjars/**",
-                        "/public",
-                        "/swagger-ui/**",
-                        "/doc.html");
-    }
+    //@Override
+    //public void addInterceptors(InterceptorRegistry registry) {
+    //    //1.添加自定义拦截器
+    //    //2.指定拦截器的url地址
+    //    //3.指定不拦截的url地址
+    //    registry.addInterceptor(jwtInterceptor)
+    //            .addPathPatterns("/**")
+    //            .excludePathPatterns("/system/user/login", "/frame/register/**", "/v2/api-docs",
+    //                    "/api-docs",
+    //                    "/api-docs-ext",
+    //                    "/swagger-resources/**",
+    //                    "/swagger-ui.html",
+    //                    "/configuration/**",
+    //                    "/webjars/**",
+    //                    "/public",
+    //                    "/swagger-ui/**",
+    //                    "/doc.html");
+    //}
 }

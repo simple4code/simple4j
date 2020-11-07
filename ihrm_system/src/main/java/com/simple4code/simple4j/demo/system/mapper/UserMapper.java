@@ -2,9 +2,12 @@ package com.simple4code.simple4j.demo.system.mapper;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.simple4code.simple4j.core.config.mybatis.CustomBaseMapper;
+import com.simple4code.simple4j.demo.system.entity.Permission;
 import com.simple4code.simple4j.demo.system.entity.User;
 import com.simple4code.simple4j.demo.system.entity.vo.UserVO;
 import org.apache.ibatis.annotations.*;
+
+import java.util.List;
 
 /**
  * <p>
@@ -45,5 +48,13 @@ public interface UserMapper extends CustomBaseMapper<User> {
     <select id="findById" resultType="com.simple4code.simple4j.demo.system.entity.dto.UserVO"></select>
 
     * */
+
+    /**
+     * 根据用户名查询用户
+     *
+     * @param userName
+     * @return
+     */
+    User selectByName(String userName);
 
 }

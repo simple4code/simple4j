@@ -21,4 +21,6 @@ public interface UserService extends IService<User> {
     UserVO findByMobile(String mobile);
 
     Integer testBatch(Collection<User> testList);
+
+    User getUserByUserName(String username);
 }

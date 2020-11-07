@@ -29,5 +29,10 @@
     <sql id="Base_Column_List">
         id, mobile, username, password, role, enable_state, create_time, department_id, time_of_entry, form_of_employment, work_number, form_of_management, working_city, correction_time, in_service_status, company_id, company_name, department_name, role_ids
     </sql>
+    <!--根据用户名查询用户-->
+    <select id="selectByName" resultMap="BaseResultMap">
+        select * from pe_user where username= #{userName};
+    </select>
+
 
 </mapper>

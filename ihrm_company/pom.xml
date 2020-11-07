@@ -17,6 +17,10 @@
         <scope>test</scope>
     </dependency>
     <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+    <dependency>
         <groupId>com.simple4code.simple4j.multiModule</groupId>
         <artifactId>common-domain</artifactId>
     </dependency>

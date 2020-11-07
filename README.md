@@ -8,10 +8,13 @@
 
 * Springboot+Spring-Security+JWT+Redis实现restf   
 https://blog.csdn.net/ech13an/article/details/80779973   
+* Springboot+Spring 
+https://blog.csdn.net/ech13an/article/details/80779973
 
-* https://blog.csdn.net/ech13an/article/details/80779973
-* Springboot+Spring
  
+* springboot+springsecurity+mybatis+JWT+Redis 实现前后端离（实战篇续）  
+https://blog.csdn.net/zzxzzxhao/article/details/83412648
+
 ## 一对多 多对多
 * https://www.cnblogs.com/wenwuxianren/p/11032180.html
 * springboot整合mybatis-plus基于纯注解实现一对一(一对多)查询

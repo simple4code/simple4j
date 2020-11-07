@@ -4,18 +4,38 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.simple4code.simple4j.demo.system.entity.Permission">
-        <id column="id" property="id" />
-        <result column="description" property="description" />
-        <result column="name" property="name" />
-        <result column="type" property="type" />
-        <result column="pid" property="pid" />
-        <result column="code" property="code" />
-        <result column="en_visible" property="enVisible" />
+        <id column="id" property="id"/>
+        <result column="description" property="description"/>
+        <result column="name" property="name"/>
+        <result column="type" property="type"/>
+        <result column="pid" property="pid"/>
+        <result column="code" property="code"/>
+        <result column="en_visible" property="enVisible"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, description, name, type, pid, code, en_visible
     </sql>
-
+    <select id="selectListByUser" resultMap="BaseResultMap">
+        SELECT
+            p.*
+            FROM
+            pe_user AS u
+            LEFT JOIN pe_user_role AS ur
+            ON u.id = ur.user_id
+            LEFT JOIN pe_role AS r
+            ON r.id = ur.role_id
+            LEFT JOIN pe_role_permission AS rp
+            ON r.id = rp.role_id
+            LEFT JOIN pe_permission AS p
+            ON p.id = rp.permission_id
+        WHERE u.id = #{userId}
+    </select>
+    <select id="selectListByPath" resultMap="BaseResultMap">
+    SELECT pe.* FROM pe_permission  pe
+       LEFT JOIN pe_permission_point pp ON pp.point_class = pe.code
+       LEFT JOIN pe_permission_api pa ON pa.id = pp.api_id
+       WHERE pe.type='2' and  pa.api_url =  #{path}
+    </select>
 </mapper>

@@ -21,4 +21,20 @@ public interface PermissionMapper extends BaseMapper<Permission> {
             " pe_role_permission on pe_permission.id=pe_role_permission.permission_id " +
             " where  pe_role_permission.role_id =#{roleId} ")
     List<Permission> getListByRoleId(String roleId);
+
+    /**
+     * 查询用户的权限列表
+     *
+     * @param userId
+     * @return
+     */
+    List<Permission> selectListByUser(String userId);
+
+    /**
+     * 根据路径查权限
+     *
+     * @param path
+     * @return
+     */
+    List<Permission> selectListByPath(String path);
 }

@@ -17,4 +17,8 @@ import java.util.Map;
 public interface PermissionService extends IService<Permission> {
 
     List<Permission> findAll(Map map);
+
+    List<Permission> selectListByUser(String id);
+
+    List<Permission> selectListByPath(String requestUrl);
 }
