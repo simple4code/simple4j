@@ -72,18 +72,13 @@ jwt:
   config:
     key: simple4j
     ttl: 3600000
+    prefix: Bearer
+    header: Authorization
+    #token失效时间（不是refreshToken）(这是自定义的)(秒)
+    expirationSeconds: 3600
+#    expirationSeconds: 300
+    #默认7天登录有效(根据业务更改)
+    validTime: 7
 
-security:
-  jwt:
-    token:
-      secret-key: simple4j.simple4code.com
-      expire-length: 300000 # 5 minutes duration by default: 5 minutes * 60 seconds * 1000 miliseconds
-      prefix: Bearer
-      header: Authorization
-#自定义参数，可以迁移走
-token:
-  #token失效时间（不是refreshToken）(这是自定义的)(秒)
-  expirationSeconds: 300
-
-  #默认7天登录有效(根据业务更改)
-  validTime: 7
+custom:
+  default-password: simple4j

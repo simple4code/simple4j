@@ -6,10 +6,11 @@ import com.simple4code.simple4j.core.entity.Result;
 import com.simple4code.simple4j.core.entity.ResultCode;
 import com.simple4code.simple4j.core.utils.JwtUtils;
 import com.simple4code.simple4j.core.utils.PermissionConstants;
-import com.simple4code.simple4j.demo.system.entity.*;
+import com.simple4code.simple4j.demo.system.entity.Permission;
+import com.simple4code.simple4j.demo.system.entity.User;
+import com.simple4code.simple4j.demo.system.entity.response.ProfileResult;
 import com.simple4code.simple4j.demo.system.entity.vo.RoleVO;
 import com.simple4code.simple4j.demo.system.entity.vo.UserVO;
-import com.simple4code.simple4j.demo.system.entity.response.ProfileResult;
 import com.simple4code.simple4j.demo.system.service.PermissionService;
 import com.simple4code.simple4j.demo.system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ import java.util.Map;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author simple4j
@@ -39,6 +40,7 @@ public class UserController extends BaseController {
 
     @Autowired
     private JwtUtils jwtUtils;
+
     /**
      * 用户登录
      * 1.通过service根据mobile查询用户
@@ -78,25 +80,34 @@ public class UserController extends BaseController {
     /**
      * 前后端约定:前端请求微服务时需要添加头信息Authorization ,内容为Bearer+空格+token
      */
-    @RequestMapping(value = "/profile", method = RequestMethod.POST)
+    @RequestMapping(value = "/profile", method = RequestMethod.POST, name = "employees")
     public Result profile(HttpServletRequest request) throws Exception {
-        String userid = claims.getId();
+        String userid = (String) claims.get("id");
         //获取用户信息
-        UserVO user = userService.findById(userid);
+        User user = userService.getById(userid);
         //根据不同的用户级别获取用户权限
 
         ProfileResult result = null;
 
-        if ("user".equals(user.getLevel())) {
-            result = new ProfileResult(user);
-        } else {
-            Map map = new HashMap();
-            if ("coAdmin".equals(user.getLevel())) {
-                map.put("enVisible", "1");
-            }
-            List<Permission> list = permissionService.findAll(map);
-            result = new ProfileResult(user, list);
-        }
+        Map map = new HashMap();
+
+        map.put("enVisible", "1");
+
+        List<Permission> list = permissionService.findAll(map);
+        result = new ProfileResult(user, list);
         return new Result(ResultCode.SUCCESS, result);
+    }
+
+    /**
+     * 简单注册功能
+     *
+     * @param username
+     * @param password
+     * @return
+     */
+    @PostMapping("/register")
+    public Result register(String username, String password) {
+        userService.register(username, password);
+        return Result.SUCCESS();
     }
 }

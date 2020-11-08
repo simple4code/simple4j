@@ -1,6 +1,7 @@
 package com.simple4code.simple4j.demo.system.entity.response;
 
 import com.simple4code.simple4j.demo.system.entity.Permission;
+import com.simple4code.simple4j.demo.system.entity.User;
 import com.simple4code.simple4j.demo.system.entity.vo.RoleVO;
 import com.simple4code.simple4j.demo.system.entity.vo.UserVO;
 import lombok.Getter;
@@ -24,7 +25,7 @@ public class ProfileResult implements Serializable {
     /**
      * @param user
      */
-    public ProfileResult(UserVO user, List<Permission> list) {
+    public ProfileResult(User user, List<Permission> list) {
         this.mobile = user.getMobile();
         this.username = user.getUsername();
         this.company = user.getCompanyName();

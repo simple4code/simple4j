@@ -22,22 +22,24 @@ import java.util.Map;
 //@ConfigurationProperties("jwt.config")
 //@Configuration(value = "jwt.config")
 public class JwtUtils {
-    //签名私钥
+
     @Value("${jwt.config.key}")
-    private String key;
-    //签名的失效时间
+    public String key;
+
     @Value("${jwt.config.ttl}")
-    private long ttl;
+    public long ttl;
 
+    @Value("${jwt.config.expirationSeconds}")
+    public Integer expirationSeconds;
 
-    @Value("${security.jwt.token.expire-length}")
-    private long validityInMilliseconds = 3600000;
+    @Value("${jwt.config.validTime}")
+    public Integer validTime;
 
-    @Value("${security.jwt.token.prefix}")
-    private String prefix;
+    @Value("${jwt.config.prefix}")
+    public String prefix;
 
-    @Value("${security.jwt.token.header}")
-    private String header;
+    @Value("${jwt.config.header}")
+    public String header;
 
     /**
      * 设置认证token
@@ -102,11 +104,9 @@ public class JwtUtils {
      * @return
      */
     public String createToken(String subject, int expirationSeconds, Map<String, Object> claims) {
-
         Date now = new Date();
         Date validity = new Date(now.getTime() + expirationSeconds * 1000);
-
-        return prefix +" "+ Jwts.builder()
+        return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(now)
@@ -140,13 +140,17 @@ public class JwtUtils {
      * @deprecation: 解析token, 获得subject中的信息
      */
     public String parseToken(String token, String salt) {
-
+        String subject = null;
+        try {
             /*Claims claims = Jwts.parser()
 //                    .setSigningKey(salt) // 不使用公钥私钥
                     .setSigningKey(publicKey)
                     .parseClaimsJws(token).getBody();*/
+            subject = getTokenBody(token).getSubject();
+        } catch (Exception e) {
+        }
+        return subject;
 
-        return getTokenBody(token).getSubject();
     }
     //
     ///**
@@ -172,14 +176,12 @@ public class JwtUtils {
      * @throws
      */
     public boolean validateToken(String expirationTime) {
-
         if (DateUtil.compare(new DateTime(), DateUtil.parse(expirationTime, DatePattern.NORM_DATE_PATTERN)) > 0) {
             //当前时间比过期时间小，失效
             return true;
         } else {
             return false;
         }
-
     }
 
     /**
@@ -189,7 +191,14 @@ public class JwtUtils {
      * @return
      */
     public Map<String, Object> getClaims(String token) {
-        return getTokenBody(token);
+        Map<String, Object> claims = null;
+        try {
+            claims = getTokenBody(token);
+        } catch (Exception e) {
+        }
+
+        return claims;
+
     }
 
     private Claims getTokenBody(String token) {

@@ -1,5 +1,6 @@
 package com.simple4code.simple4j.demo.system.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.simple4code.simple4j.demo.system.entity.Permission;
 import com.simple4code.simple4j.demo.system.mapper.PermissionMapper;
@@ -25,7 +26,10 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
 
     @Override
     public List<Permission> findAll(Map map) {
-        return null;
+        QueryWrapper<Permission> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("en_visible", map.get("enVisible"));
+
+        return permissionMapper.selectList(queryWrapper);
     }
 
     @Override
@@ -37,4 +41,6 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     public List<Permission> selectListByPath(String requestUrl) {
         return permissionMapper.selectListByPath(requestUrl);
     }
+
+
 }

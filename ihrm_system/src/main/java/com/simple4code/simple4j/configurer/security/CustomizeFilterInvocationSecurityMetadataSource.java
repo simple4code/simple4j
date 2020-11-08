@@ -1,7 +1,6 @@
 package com.simple4code.simple4j.configurer.security;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.StrUtil;
 import com.simple4code.simple4j.demo.system.entity.Permission;
 import com.simple4code.simple4j.demo.system.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,7 @@ import java.util.List;
  */
 @Component
 public class CustomizeFilterInvocationSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
-    private  AntPathMatcher antPathMatcher = new AntPathMatcher();
+    private AntPathMatcher antPathMatcher = new AntPathMatcher();
     @Autowired
     private PermissionService permissionService;
 
@@ -30,9 +29,7 @@ public class CustomizeFilterInvocationSecurityMetadataSource implements FilterIn
     public Collection<ConfigAttribute> getAttributes(Object o) throws IllegalArgumentException {
         //获取请求地址
         String requestUrl = ((FilterInvocation) o).getRequestUrl();
-        //if (StrUtil.equals(requestUrl, "/system/user/login") || StrUtil.equals(requestUrl, "/error") || StrUtil.equals(requestUrl, "/login")) {
-        //    return null;
-        //}
+
         //查询具体某个接口的权限
         List<Permission> permissionList = permissionService.selectListByPath(requestUrl);
         if (CollUtil.isEmpty(permissionList)) {

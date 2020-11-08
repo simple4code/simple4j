@@ -4,6 +4,7 @@ import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
+import com.google.common.collect.Maps;
 import com.simple4code.simple4j.configurer.security.filter.CustomizeAbstractSecurityInterceptor;
 import com.simple4code.simple4j.configurer.security.filter.JwtAuthenticationTokenFilter;
 import com.simple4code.simple4j.core.entity.Result;
@@ -11,6 +12,7 @@ import com.simple4code.simple4j.core.entity.ResultCode;
 import com.simple4code.simple4j.core.utils.AccessAddressUtil;
 import com.simple4code.simple4j.core.utils.JwtUtils;
 import com.simple4code.simple4j.core.utils.RedisUtil;
+import com.simple4code.simple4j.demo.system.entity.dto.UserDetailsDTO;
 import com.simple4code.simple4j.demo.system.service.impl.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +24,12 @@ import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -45,7 +47,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -153,8 +154,18 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                         return o;
                     }
                 })
+
+                //
+                //.and()
+                ////定义哪些URL需要被保护、哪些不需要被保护
+                //.authorizeRequests()
+
+                //.anyRequest()//任何请求,登录后可以访问
+                //.access("@rbacauthorityservice.hasPermission(request,authentication)") // RBAC 动态 url 认证
+
                 //登出
-                .and().logout()
+                .and()
+                .logout()
                 //允许所有用户
                 .permitAll()
                 //登出成功处理逻辑
@@ -165,8 +176,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                         if (StrUtil.startWith(authHeader, "Bearer ")) {
                             final String authToken = authHeader.substring("Bearer ".length());
                             //将token放入黑名单中
-                            redisUtil.hset("blacklist", authToken, DateUtil.now());
-                            log.info("token：{}已加入redis黑名单", authToken);
+                            //redisUtil.hset("blacklist", authToken, DateUtil.now());
+                            //log.info("token：{}已加入redis黑名单", authToken);
+                            redisUtil.del(authToken);
+                            log.info("token：[{}]已登出", authToken);
                         }
                         Result result = Result.SUCCESS();
                         writeJson(httpServletResponse, result);
@@ -175,8 +188,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 //登出之后删除cookie
                 .deleteCookies("JSESSIONID")
                 .logoutUrl("/logout")
+
                 //登入
-                .and().formLogin()
+                .and()
+                .formLogin()
                 //允许所有用户
                 .permitAll()
                 //登录成功处理逻辑
@@ -196,23 +211,41 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
                         //获取请求的ip地址
                         String ip = AccessAddressUtil.getIpAddress(httpServletRequest);
-                        Map<String, Object> map = new HashMap<>();
+                        Map<String, Object> map = Maps.newHashMap();
                         map.put("ip", ip);
+                        //登录成功
+                        UserDetailsDTO userDetails = (UserDetailsDTO) authentication.getPrincipal();
 
-                        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+                        //api权限字符串
+                        StringBuilder sb = new StringBuilder();
+                        //获取到所有的可访问API权限
+                        userDetails.getAuthorities().forEach(perm -> {
+                            sb.append(perm.getAuthority()).append(",");
+                        });
 
-                        String jwtToken = jwtUtils.createToken(userDetails.getUsername(), 300, map);
+                        //可访问的api权限字符串
+                        map.put("apis", sb.toString());
+                        map.put("companyId", userDetails.getCompanyId());
+                        map.put("companyName", userDetails.getCompanyName());
+                        map.put("id", userDetails.getId());
+
+
+                        String jwtToken = jwtUtils.createToken(userDetails.getUsername(), jwtUtils.expirationSeconds, map);
 
                         //刷新时间
-                        Integer expire = 7 * 24 * 60 * 60 * 1000;
+                        Integer expire = jwtUtils.validTime * 24 * 60 * 60 * 1000;
 
-                        redisUtil.hset(jwtToken, "tokenValidTime", DateUtil.format(new Date(System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000), DatePattern.NORM_DATETIME_FORMAT), expire);
-                        redisUtil.hset(jwtToken, "expirationTime", DateUtil.format(new Date(System.currentTimeMillis() + 300 * 1000), DatePattern.NORM_DATETIME_FORMAT), expire);
+                        redisUtil.hset(jwtToken, "tokenValidTime", DateUtil.format(new Date(System.currentTimeMillis() + jwtUtils.validTime * 24 * 60 * 60 * 1000), DatePattern.NORM_DATETIME_FORMAT), expire);
+                        redisUtil.hset(jwtToken, "expirationTime", DateUtil.format(new Date(System.currentTimeMillis() + jwtUtils.expirationSeconds * 1000), DatePattern.NORM_DATETIME_FORMAT), expire);
                         redisUtil.hset(jwtToken, "username", userDetails.getUsername(), expire);
                         redisUtil.hset(jwtToken, "ip", ip, expire);
+                        redisUtil.hset(jwtToken, "apis", sb.toString(), expire);
+                        redisUtil.hset(jwtToken, "companyId", userDetails.getCompanyId(), expire);
+                        redisUtil.hset(jwtToken, "companyName", userDetails.getCompanyName(), expire);
+                        redisUtil.hset(jwtToken, "id", userDetails.getId(), expire);
 
 
-                        log.info("用户{}登录成功，信息已保存至redis", userDetails.getUsername());
+                        log.info("用户[{}]登录成功，信息已保存至redis", userDetails.getUsername());
                         //返回json数据
                         Result result = new Result(ResultCode.SUCCESS, jwtToken);
                         writeJson(httpServletResponse, result);
@@ -253,7 +286,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                     }
                 })
                 //异常处理(权限拒绝、登录失效等)
-                .and().exceptionHandling()
+                .and()
+                .exceptionHandling()
                 //权限拒绝处理逻辑
                 .accessDeniedHandler(new AccessDeniedHandler() {
                     @Override
@@ -273,7 +307,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                     }
                 })
                 //会话管理
-                .and().sessionManagement()
+                .and()
+                .sessionManagement()
                 // 使用 JWT，关闭token
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 //同一账号同时登录最大用户数
@@ -296,6 +331,20 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.addFilterBefore(securityInterceptor, FilterSecurityInterceptor.class);
 
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/v2/api-docs",
+                "/api-docs",
+                "/api-docs-ext",
+                "/swagger-resources/**",
+                "/swagger-ui.html",
+                "/configuration/**",
+                "/webjars/**",
+                "/public",
+                "/swagger-ui/**",
+                "/doc.html");
     }
 
     private void writeJson(HttpServletResponse httpServletResponse, Result result) throws IOException {
