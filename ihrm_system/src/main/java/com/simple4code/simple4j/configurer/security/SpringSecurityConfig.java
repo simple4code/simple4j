@@ -178,8 +178,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                             //将token放入黑名单中
                             //redisUtil.hset("blacklist", authToken, DateUtil.now());
                             //log.info("token：{}已加入redis黑名单", authToken);
+                            Map<String, Object> claims = jwtUtils.getClaims(authToken);
                             redisUtil.del(authToken);
-                            log.info("token：[{}]已登出", authToken);
+                            log.info("token：【{}】 已登出",  claims.get("id"));
                         }
                         Result result = Result.SUCCESS();
                         writeJson(httpServletResponse, result);
