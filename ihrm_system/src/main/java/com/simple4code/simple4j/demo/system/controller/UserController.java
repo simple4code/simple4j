@@ -13,6 +13,8 @@ import com.simple4code.simple4j.demo.system.entity.vo.RoleVO;
 import com.simple4code.simple4j.demo.system.entity.vo.UserVO;
 import com.simple4code.simple4j.demo.system.service.PermissionService;
 import com.simple4code.simple4j.demo.system.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +31,7 @@ import java.util.Map;
  * @author simple4j
  * @since 2020-10-31
  */
+@Api(tags = "用户接口")
 @CrossOrigin
 @RestController
 @RequestMapping("/system/user")
@@ -47,6 +50,7 @@ public class UserController extends BaseController {
      * 2.比较password
      * 3.生成jwt信息
      */
+
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Result login(@RequestBody Map<String, String> loginMap) {
         String mobile = loginMap.get("mobile");
@@ -80,6 +84,7 @@ public class UserController extends BaseController {
     /**
      * 前后端约定:前端请求微服务时需要添加头信息Authorization ,内容为Bearer+空格+token
      */
+    @ApiOperation(value = "测试用户详情")
     @RequestMapping(value = "/profile", method = RequestMethod.POST, name = "employees")
     public Result profile(HttpServletRequest request) throws Exception {
         String userid = (String) claims.get("id");
@@ -105,6 +110,7 @@ public class UserController extends BaseController {
      * @param password
      * @return
      */
+    @ApiOperation(value = "用户注册")
     @PostMapping("/register")
     public Result register(String username, String password) {
         userService.register(username, password);

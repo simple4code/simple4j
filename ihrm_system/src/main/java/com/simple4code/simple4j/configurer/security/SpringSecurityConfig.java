@@ -345,7 +345,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/webjars/**",
                 "/public",
                 "/swagger-ui/**",
-                "/doc.html");
+                "/doc.html","/favicon.ico");
     }
 
     private void writeJson(HttpServletResponse httpServletResponse, Result result) throws IOException {
