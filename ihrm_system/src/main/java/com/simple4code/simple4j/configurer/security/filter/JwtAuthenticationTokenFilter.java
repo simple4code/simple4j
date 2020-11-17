@@ -159,7 +159,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 //    }
                 //}
 
-            }else{
+            } else {
                 log.info("【{}】 的token 失效", username);
                 Result result = new Result(ResultCode.USER_TOKEN_EXPIRED);
                 writeJson(response, result);
@@ -212,7 +212,6 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
             }
         }
-
         filterChain.doFilter(request, response);
 
     }

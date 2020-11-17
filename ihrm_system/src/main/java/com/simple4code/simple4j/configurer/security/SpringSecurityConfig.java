@@ -5,6 +5,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.google.common.collect.Maps;
+import com.simple4code.simple4j.configurer.security.filter.CustomAuthenticationFilter;
 import com.simple4code.simple4j.configurer.security.filter.CustomizeAbstractSecurityInterceptor;
 import com.simple4code.simple4j.configurer.security.filter.JwtAuthenticationTokenFilter;
 import com.simple4code.simple4j.core.entity.Result;
@@ -180,7 +181,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                             //log.info("token：{}已加入redis黑名单", authToken);
                             Map<String, Object> claims = jwtUtils.getClaims(authToken);
                             redisUtil.del(authToken);
-                            log.info("token：【{}】 已登出",  claims.get("id"));
+                            log.info("token：【{}】 已登出", claims.get("id"));
                         }
                         Result result = Result.SUCCESS();
                         writeJson(httpServletResponse, result);
@@ -189,103 +190,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 //登出之后删除cookie
                 .deleteCookies("JSESSIONID")
                 .logoutUrl("/logout")
-
-                //登入
                 .and()
+                //登入
+                .addFilterAt(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .formLogin()
                 //允许所有用户
                 .permitAll()
-                //登录成功处理逻辑
-                .successHandler(new AuthenticationSuccessHandler() {
-                    @Override
-                    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-                        //更新用户表上次登录时间、更新人、更新时间等字段
-                        //User userDetails = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-                        //User user = userService.getUserByUserName(userDetails.getUsername());
-                        //user.setLastLoginTime(new Date());
-                        //user.setUpdateTime(new Date());
-                        //user.setUpdateUser(user.getId());
-                        //userService.update(sysUser);
-
-                        //此处还可以进行一些处理，比如登录成功之后可能需要返回给前台当前用户有哪些菜单权限，
-                        //进而前台动态的控制菜单的显示等，具体根据自己的业务需求进行扩展
-
-                        //获取请求的ip地址
-                        String ip = AccessAddressUtil.getIpAddress(httpServletRequest);
-                        Map<String, Object> map = Maps.newHashMap();
-                        map.put("ip", ip);
-                        //登录成功
-                        UserDetailsDTO userDetails = (UserDetailsDTO) authentication.getPrincipal();
-
-                        //api权限字符串
-                        StringBuilder sb = new StringBuilder();
-                        //获取到所有的可访问API权限
-                        userDetails.getAuthorities().forEach(perm -> {
-                            sb.append(perm.getAuthority()).append(",");
-                        });
-
-                        //可访问的api权限字符串
-                        map.put("apis", sb.toString());
-                        map.put("companyId", userDetails.getCompanyId());
-                        map.put("companyName", userDetails.getCompanyName());
-                        map.put("id", userDetails.getId());
-
-
-                        String jwtToken = jwtUtils.createToken(userDetails.getUsername(), jwtUtils.expirationSeconds, map);
-
-                        //刷新时间
-                        Integer expire = jwtUtils.validTime * 24 * 60 * 60 * 1000;
-
-                        redisUtil.hset(jwtToken, "tokenValidTime", DateUtil.format(new Date(System.currentTimeMillis() + jwtUtils.validTime * 24 * 60 * 60 * 1000), DatePattern.NORM_DATETIME_FORMAT), expire);
-                        redisUtil.hset(jwtToken, "expirationTime", DateUtil.format(new Date(System.currentTimeMillis() + jwtUtils.expirationSeconds * 1000), DatePattern.NORM_DATETIME_FORMAT), expire);
-                        redisUtil.hset(jwtToken, "username", userDetails.getUsername(), expire);
-                        redisUtil.hset(jwtToken, "ip", ip, expire);
-                        redisUtil.hset(jwtToken, "apis", sb.toString(), expire);
-                        redisUtil.hset(jwtToken, "companyId", userDetails.getCompanyId(), expire);
-                        redisUtil.hset(jwtToken, "companyName", userDetails.getCompanyName(), expire);
-                        redisUtil.hset(jwtToken, "id", userDetails.getId(), expire);
-
-
-                        log.info("用户[{}]登录成功，信息已保存至redis", userDetails.getUsername());
-                        //返回json数据
-                        Result result = new Result(ResultCode.SUCCESS, jwtToken);
-                        writeJson(httpServletResponse, result);
-                    }
-                })
-                //登录失败处理逻辑
-                .failureHandler(new AuthenticationFailureHandler() {
-
-                    @Override
-                    public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-                        //httpServletResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                        //返回json数据
-                        Result result = null;
-                        if (e instanceof AccountExpiredException) {
-                            //账号过期
-                            result = new Result(ResultCode.USER_ACCOUNT_EXPIRED);
-                        } else if (e instanceof BadCredentialsException) {
-                            //密码错误
-                            result = new Result(ResultCode.USER_CREDENTIALS_ERROR);
-                        } else if (e instanceof CredentialsExpiredException) {
-                            //密码过期
-                            result = new Result(ResultCode.USER_CREDENTIALS_EXPIRED);
-                        } else if (e instanceof DisabledException) {
-                            //账号不可用
-                            result = new Result(ResultCode.USER_ACCOUNT_DISABLE);
-                        } else if (e instanceof LockedException) {
-                            //账号锁定
-                            result = new Result(ResultCode.USER_ACCOUNT_LOCKED);
-                        } else if (e instanceof InternalAuthenticationServiceException) {
-                            //用户不存在
-                            result = new Result(ResultCode.USER_ACCOUNT_NOT_EXIST);
-                        } else {
-                            //其他错误
-                            result = new Result(ResultCode.COMMON_FAIL);
-                        }
-                        //处理编码方式，防止中文乱码的情况
-                        writeJson(httpServletResponse, result);
-                    }
-                })
                 //异常处理(权限拒绝、登录失效等)
                 .and()
                 .exceptionHandling()
@@ -332,6 +242,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.addFilterBefore(securityInterceptor, FilterSecurityInterceptor.class);
 
+
     }
 
     @Override
@@ -345,7 +256,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/webjars/**",
                 "/public",
                 "/swagger-ui/**",
-                "/doc.html","/favicon.ico");
+                "/doc.html", "/favicon.ico");
     }
 
     private void writeJson(HttpServletResponse httpServletResponse, Result result) throws IOException {
@@ -369,4 +280,102 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     //    source.registerCorsConfiguration("/**", corsConfiguration);
     //    return source;
     //}
+    @Bean
+    public CustomAuthenticationFilter customAuthenticationFilter() throws Exception {
+        CustomAuthenticationFilter filter = new CustomAuthenticationFilter();
+        //登录成功处理逻辑
+        filter.setAuthenticationSuccessHandler(new AuthenticationSuccessHandler() {
+            @Override
+            public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
+                //更新用户表上次登录时间、更新人、更新时间等字段
+                //User userDetails = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                //User user = userService.getUserByUserName(userDetails.getUsername());
+                //user.setLastLoginTime(new Date());
+                //user.setUpdateTime(new Date());
+                //user.setUpdateUser(user.getId());
+                //userService.update(sysUser);
+
+                //此处还可以进行一些处理，比如登录成功之后可能需要返回给前台当前用户有哪些菜单权限，
+                //进而前台动态的控制菜单的显示等，具体根据自己的业务需求进行扩展
+
+                //获取请求的ip地址
+                String ip = AccessAddressUtil.getIpAddress(httpServletRequest);
+                Map<String, Object> map = Maps.newHashMap();
+                map.put("ip", ip);
+                //登录成功
+                UserDetailsDTO userDetails = (UserDetailsDTO) authentication.getPrincipal();
+
+                //api权限字符串
+                StringBuilder sb = new StringBuilder();
+                //获取到所有的可访问API权限
+                userDetails.getAuthorities().forEach(perm -> {
+                    sb.append(perm.getAuthority()).append(",");
+                });
+
+                //可访问的api权限字符串
+                map.put("apis", sb.toString());
+                map.put("companyId", userDetails.getCompanyId());
+                map.put("companyName", userDetails.getCompanyName());
+                map.put("id", userDetails.getId());
+
+
+                String jwtToken = jwtUtils.createToken(userDetails.getUsername(), jwtUtils.expirationSeconds, map);
+
+                //刷新时间
+                Integer expire = jwtUtils.validTime * 24 * 60 * 60 * 1000;
+
+                redisUtil.hset(jwtToken, "tokenValidTime", DateUtil.format(new Date(System.currentTimeMillis() + jwtUtils.validTime * 24 * 60 * 60 * 1000), DatePattern.NORM_DATETIME_FORMAT), expire);
+                redisUtil.hset(jwtToken, "expirationTime", DateUtil.format(new Date(System.currentTimeMillis() + jwtUtils.expirationSeconds * 1000), DatePattern.NORM_DATETIME_FORMAT), expire);
+                redisUtil.hset(jwtToken, "username", userDetails.getUsername(), expire);
+                redisUtil.hset(jwtToken, "ip", ip, expire);
+                redisUtil.hset(jwtToken, "apis", sb.toString(), expire);
+                redisUtil.hset(jwtToken, "companyId", userDetails.getCompanyId(), expire);
+                redisUtil.hset(jwtToken, "companyName", userDetails.getCompanyName(), expire);
+                redisUtil.hset(jwtToken, "id", userDetails.getId(), expire);
+
+
+                log.info("用户[{}]登录成功，信息已保存至redis", userDetails.getUsername());
+                //返回json数据
+                Result result = new Result(ResultCode.SUCCESS, jwtToken);
+                writeJson(httpServletResponse, result);
+            }
+        });
+        //登录失败处理逻辑
+        filter.setAuthenticationFailureHandler(new AuthenticationFailureHandler() {
+
+            @Override
+            public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
+                //httpServletResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                //返回json数据
+                Result result = null;
+                if (e instanceof AccountExpiredException) {
+                    //账号过期
+                    result = new Result(ResultCode.USER_ACCOUNT_EXPIRED);
+                } else if (e instanceof BadCredentialsException) {
+                    //密码错误
+                    result = new Result(ResultCode.USER_CREDENTIALS_ERROR);
+                } else if (e instanceof CredentialsExpiredException) {
+                    //密码过期
+                    result = new Result(ResultCode.USER_CREDENTIALS_EXPIRED);
+                } else if (e instanceof DisabledException) {
+                    //账号不可用
+                    result = new Result(ResultCode.USER_ACCOUNT_DISABLE);
+                } else if (e instanceof LockedException) {
+                    //账号锁定
+                    result = new Result(ResultCode.USER_ACCOUNT_LOCKED);
+                } else if (e instanceof InternalAuthenticationServiceException) {
+                    //用户不存在
+                    result = new Result(ResultCode.USER_ACCOUNT_NOT_EXIST);
+                } else {
+                    //其他错误
+                    result = new Result(ResultCode.COMMON_FAIL);
+                }
+                //处理编码方式，防止中文乱码的情况
+                writeJson(httpServletResponse, result);
+            }
+        });
+
+        filter.setAuthenticationManager(authenticationManagerBean());
+        return filter;
+    }
 }
