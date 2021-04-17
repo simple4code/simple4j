@@ -34,14 +34,14 @@ public class CodeGenerator {
     /**
      * 项目工程包名
      */
-    private static final String MODULE_PARENT = "multiModule_";
-    private static final String MODULE = "manage";
-    private static final String CONTROLLER_MODULE = MODULE_PARENT + MODULE + File.separator + MODULE + "_web";
-    private static final String COMMON_MODULE = "multiModule_commons";
-    private static final String DAO_MODULE = COMMON_MODULE + File.separator + "common-dao";
-    private static final String SERVICE_MODULE = COMMON_MODULE + File.separator + "common-service";
-    private static final String SERVICE_IMPL_MODULE = MODULE_PARENT + MODULE + File.separator + MODULE + "_service_impl";
-    private static final String DOMAIN_MODULE = COMMON_MODULE + File.separator + "common-domain";
+    private static final String MODULE_PARENT = "admin_";
+    private static final String MODULE = "api";
+    private static final String CONTROLLER_MODULE = MODULE_PARENT + MODULE  ;
+    private static final String COMMON_MODULE = "framework_common";
+    private static final String DAO_MODULE =CONTROLLER_MODULE;
+    private static final String SERVICE_MODULE = CONTROLLER_MODULE;
+    private static final String SERVICE_IMPL_MODULE = CONTROLLER_MODULE;
+    private static final String DOMAIN_MODULE = COMMON_MODULE + File.separator + "common-model";
     /**
      * 模块包名
      */
@@ -49,7 +49,7 @@ public class CodeGenerator {
     /**
      * 包路径
      */
-    private static final String PACKAGE_PARENT = "com.simple4code.simple4j.demo" ;
+    private static final String PACKAGE_PARENT = "com.simple4j.demo" ;
     /**
      * 表的前缀
      */

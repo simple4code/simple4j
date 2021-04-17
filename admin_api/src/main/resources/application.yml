@@ -1,0 +1,20 @@
+spring:
+  profiles:
+    active: dev
+
+mybatis-plus:
+  mapper-locations: classpath:/mapper/**/*Mapper.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  type-aliases-package: com.simple4j.demo.*.entity
+security:
+  jwt:
+    token:
+      secret-key: simple4j.com
+      expire-length: 300000 # 5 minutes duration by default: 5 minutes * 60 seconds * 1000 miliseconds
+      prefix: Bearer_
+      header: Authorization
+server:
+  port: 9091
+  servlet:
+    context-path: /admin
